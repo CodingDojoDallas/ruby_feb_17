@@ -1,0 +1,41 @@
+rails new blogs_one
+cd blogs_one
+rails g model Blog name:string description:text
+rails g model Post blog_id:integer title:string content:text
+rails g model Message post_id:integer author:string message:text
+rake db:migrate
+rails c
+
+Hirb.enable
+Blog.create(name:"DC Corps", description:"For fans of DC Comics")
+Blog.create(name:"Zelda Universe" , description:"Fansite for the Zelda franchise of games")
+Blog.create(name:"ANN" , description:"Anime News Network")
+Blog.create(name:"Disneymania" , description:"News about Disney animation")
+Blog.create(name:"Hamilton Musical" , description:"We're obsessed with Hamilton!")
+Post.create(blog:Blog.find(1), title:"Rebirth event sales", content:"The Rebirth books are a success! Which are you reading?")
+Post.create(blog:Blog.find(1), title:"Alex Ross", content:"It would be awesome if he could make one of the movie posters.")
+Post.create(blog:Blog.find(1), title:"Fake news", content:"Don't listen to the film blogs. They're idiots")
+Post.create(blog:Blog.find(2), title:"2 More Weeks!", content:"What are you most looking forward to in the new game?")
+Post.create(blog:Blog.find(2), title:"Zelda DLC", content:"Breath of the Wild will have the first DLC content of the franchise.")
+Post.create(blog:Blog.find(3), title:"Attack on Titan", content:"New theme song for season 2")
+Post.create(blog:Blog.find(3), title:"Ghost in the Shell", content:"Casting leads to controversy.")
+Post.create(blog:Blog.find(3), title:"Studio Ghibli", content:"Are they not making more films?!")
+Post.create(blog:Blog.find(4), title:"Disney/Marvel", content:"Good or bad?")
+Post.create(blog:Blog.find(5), title:"Late to the party", content:"OMG this musical is fantastic!")
+Message.create(post:Post.find(1), author:"Sydney", message:"Batman and Green Arrow are the best right now.")
+Message.create(post:Post.find(1), author:"Rachel", message:"Aquaman is surprisingly good.")
+Message.create(post:Post.find(4), author:"Lauren", message:"I've never played a Zelda game before.")
+Message.create(post:Post.find(4), author:"Zach", message:"Yes it's finally here!")
+Message.create(post:Post.find(6), author:"Sydney", message:"It's the same band right?")
+Message.create(post:Post.find(6), author:"Lauren", message:"I don't see how they can top the season 1 opener.")
+Message.create(post:Post.find(9), author:"Sean", message:"Baaaad. All the movies are so predictable now.")
+Message.create(post:Post.find(9), author:"Zach", message:"Well they're popular, that's for sure.")
+Message.create(post:Post.find(10), author:"Sydney", message:"This play came out 2 years ago lol.")
+Message.create(post:Post.find(10), author:"Rachel", message:"My Shot has been stuck in my head for weeks.")
+
+Blog.first.posts
+Blog.last.posts.order(title: :desc)
+Post.update(1, title:"DC Rebirth event going strong")
+Post.find(10).destroy
+Blog.all
+Blog.where("id < ?", 5)

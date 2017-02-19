@@ -1,0 +1,45 @@
+mistake:
+rake db:rollback
+
+
+rails new blogs_two
+cd blogs_two
+rails g model User first_name:string last_name:string email_address:string
+rails g model Owner user_id:integer blog_id:integer
+rails g model Blog name:string description:text
+rails g model Post blog_id:integer user_id:integer title:string content:text
+rails g model Message post_id:integer user_id:integer author:string message:text
+rake db:migrate
+rails c
+
+User.create(first_name:Faker::Name.first_name, last_name:Faker::Name.last_name, email_address:Faker::Internet.email)
+Blog.create(name:Faker::Company.name, description:Faker::Company.catch_phrase)
+Owner.create(user:User.first, blog:Blog.first)
+Owner.create(user:User.first, blog:Blog.find(2))
+Owner.create(user:User.first, blog:Blog.find(3))
+Owner.create(user:User.find(2), blog:Blog.find(4))
+Owner.create(user:User.last, blog:Blog.last)
+Owner.create(user:User.find(3), blog:Blog.find(1))
+Owner.create(user:User.find(3), blog:Blog.find(2))
+Owner.create(user:User.find(3), blog:Blog.find(3))
+Owner.create(user:User.find(3), blog:Blog.find(4))
+Owner.create(user:User.find(3), blog:Blog.find(5))
+Post.create(blog:Blog.find(2), user:User.first, title:Faker::Hipster.sentence, content:Faker::Hipster.paragraph)
+Post.create(blog:Blog.last, user:User.find(2), title:Faker::Hipster.sentence, content:Faker::Hipster.paragraph)
+Post.create(blog:Blog.last, user:User.find(3), title:Faker::Hipster.sentence, content:Faker::Hipster.paragraph)
+Post.create(blog:Blog.first, user:User.find(3), title:Faker::Hipster.sentence, content:Faker::Hipster.paragraph)
+Post.create(blog:Blog.find(3), user:User.find(3), title:Faker::Hipster.sentence, content:Faker::Hipster.paragraph)
+Post.create(blog:Blog.find(4), user:User.find(3), title:Faker::Hipster.sentence, content:Faker::Hipster.paragraph)
+Message.create(post:Post.first, user:User.find(3), author:User.find(3).full_name, message:Faker::Hipster.paragraph)
+Message.create(post:Post.find(2), user:User.find(3), author:User.find(3).full_name, message:Faker::Hipster.paragraph)
+Message.create(post:Post.last, user:User.find(4), author:User.find(4).full_name, message:Faker::Hipster.paragraph)
+Post.update(2, user:User.last)
+Post.update(2, content:"Dummy data")
+User.find(3).blogs
+User.find(3).posts
+User.find(3).messages
+Blog.first.posts
+Blog.first.messages
+Blog.first.users
+Owner.where(user:User.first, blog:Blog.first).destroy_all
+ 
