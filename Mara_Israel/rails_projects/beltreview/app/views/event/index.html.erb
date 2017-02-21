@@ -1,0 +1,115 @@
+<style>
+#data {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+
+}
+
+#data td, #data th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#data tr:nth-child(even){background-color: #f2f2f2;}
+
+#data tr:hover {background-color: #ddd;}
+
+#data th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+
+}
+
+.pretty th .current {
+  padding-right: 12px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.pretty th .asc {
+  background-image: url(/images/up_arrow.gif);
+}
+
+.pretty th .desc {
+  background-image: url(/images/down_arrow.gif);
+}
+
+.perfect th .current {
+  padding-right: 12px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.perfect th .asc {
+  background-image: url(/images/up_arrow.gif);
+}
+
+.perfect th .desc {
+  background-image: url(/images/down_arrow.gif);
+}
+
+
+</style>
+<a href="/user/<%= current_user.id %>">Edit My Profile</a> <a href="/logout">Logout</a>
+<h1>Welcome, <%= current_user.first_name %> ! </h1>
+
+<h3>Here are some of the events in your state:</h3>
+<table id="data" class="perfect">
+	<tr>
+		<th><%= sortable "name" %></th>
+    <th><%= sortable "date" %></th>
+		<th>Location</th>
+		<th><%= sortable "user", "Host" %></th>
+		<th>Action/Status</th>
+	</tr>
+<% @events.where(:location_state => current_user.location_state).each do |event|%>
+	<tr>
+		<td><a href="/event/<%= event.id %>"><%= event.name %></a></td>
+		<td><%= event.date.strftime("%B %d %Y") %></td>
+		<td><%= event.location_city %></td>
+		<td><%= event.user.first_name %></td>
+		<td><% if not event.user == current_user %><% if event.users.include?(current_user) %> Joining <a href="/remove/<%= event.id %>">Cancel</a></form><% else %> <a href="/join/<%= event.id %>">Join</a><% end %> <% else %> <a href="#">Edit</a> <a href="/delete/<%= event.id %>">Delete</a> <%end%></td>
+	</tr>
+<% end %>
+</table>
+<p></p><p></p>
+<h3>Here are some of the events in others states:</h3>
+<table id="data" class="pretty">
+	<tr>
+		<th><%= sortable "name" %></th>
+    <th><%= sortable "date" %></th>
+		<th>Location</th>
+		<th>State</th>
+    <th><%= sortable "user", "Host" %></th>
+		<th>Action</th>
+	</tr>
+<% @events.where.not(:location_state => current_user.location_state).each do |event| %>
+	<% if not event.users.include?(current_user) %>
+		<tr>
+			<td><a href="/event/<%= event.id %>"><%= event.name %></a></td>
+			<td><%= event.date.strftime("%B %d %Y") %></td>
+			<td><%= event.location_city %></td>
+			<td><%= event.location_state %></td>
+			<td><%= event.user.first_name %></td>
+			<td><a href="/join/<%= event.id %>">Join</a></td>
+		<tr>
+	<% end %>
+<% end %>
+</table>
+
+<h2>Add Event</h2>
+<%= form_for @event, url:'/event' do |f| %>
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	Name: <%= f.text_field :name %><br>
+	Date: <%= f.date_field :date %><br>
+	Location: <%= f.text_field :location_city %> <%= f.select :location_state, options_for_select([['AL', 'AL'],['AK', 'AK'],['AZ', 'AZ'],['AR', 'AR'],['CA', 'CA'], ['CO', 'CO'], ['CT', 'CT']]) %><br>
+	<%= f.submit "Add Event" %>
+<% end %>
+<% if @event.errors.full_messages.any? %>
+	<% @event.errors.full_messages.each do |error| %>
+    <%= error %><br />
+  <% end %>
+<% end %>
+
+

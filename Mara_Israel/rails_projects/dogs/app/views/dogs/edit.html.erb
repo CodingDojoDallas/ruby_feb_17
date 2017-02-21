@@ -1,0 +1,11 @@
+<h1>Dog#edit</h1>
+<p>Find me in app/views/dog/edit.html.erb</p>
+
+<form method="POST" action="/dogs/<%= @dog.id %>">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="hidden" name="_method" value="PATCH">
+	
+	Name: <input name="name" value="<%= @dog.name %>"><br>
+	Breed: <input name="breed" value="<%= @dog.breed %>"><br>
+	<input type="submit">
+</form>

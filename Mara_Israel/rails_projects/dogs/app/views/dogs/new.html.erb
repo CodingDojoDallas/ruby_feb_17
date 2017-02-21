@@ -1,0 +1,9 @@
+<h1>Dog#new</h1>
+<p>Find me in app/views/dog/new.html.erb</p>
+
+<form method="POST" action="/dogs">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	Name: <input name="name"><br>
+	Breed: <input name="breed"><br>
+	<input type="submit">
+</form>

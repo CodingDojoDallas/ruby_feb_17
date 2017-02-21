@@ -1,0 +1,82 @@
+<style>
+#data {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+
+}
+
+#data td, #data th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#data tr:nth-child(even){background-color: #f2f2f2;}
+
+#data tr:hover {background-color: #ddd;}
+
+#data th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+
+}
+
+.pretty th .current {
+  padding-right: 12px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.pretty th .asc {
+  background-image: url(/images/up_arrow.gif);
+}
+
+.pretty th .desc {
+  background-image: url(/images/down_arrow.gif);
+}
+
+.comment_box {
+	overflow: auto;
+	width: 350px;
+	height: 400px;
+
+}
+
+</style>
+<a href="/event">Events Dashboard</a> <a href="/logout">Logout</a>
+<br>
+<h1><%= @event.name %></h1>
+
+<h3>Host: <%= @event.user.first_name %> </h3>
+<h3>Date: <%= @event.date.strftime("%B %d, %Y") %></h3>
+<h3>Location: <%= @event.location_city %>, <%= @event.location_state %></h3>
+<h3>People who are joining the event: <%= @event.users.count %></h3>
+
+<table id="data" class="pretty">
+	<tr>
+		<th><%= sortable "name" %></th>
+		<th>Location</th>
+		<th>State</th>
+	</tr>
+	<% @event.users.where(:id => current_user).each do |patron| %>
+			<tr>
+				<td><%= patron.first_name %> <%= patron.last_name %></td>
+				<td><%= patron.location_city %></td>
+				<td><%= patron.location_state %></td>
+			</tr>
+	<%end%>
+</table>
+
+<h2>Discussion about this event:</h2>
+<div class="comment_box">
+	<% @comments.each do |comment| %>
+		<%= comment.user.first_name %> says: <%= comment.text %> <hr width="25%" align="left"><br>
+	<% end %>
+</div>
+<h4>Add Comment:</h4>
+<form method="post" action="/comment">
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	<input type="hidden" name="event_id" value="<%= params[:id] %>">
+	<textarea rows="4" cols="55" name="text"></textarea><br>
+	<input type="submit" value="Submit Comments">
+</form>
