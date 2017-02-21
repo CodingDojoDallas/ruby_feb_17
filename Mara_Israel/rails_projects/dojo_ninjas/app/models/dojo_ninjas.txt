@@ -1,0 +1,55 @@
+1. rails new dojo_ninjas
+2. rails g model Dojo name:string city:string state:string
+		rails g model Ninja first_name:string last_name:string dojo:references
+
+3. rails c
+	1. Dojo.create(name: "CodingDojo Silicon Valley", city: "Mountain View", state: "CA")
+		 Dojo.create(name: "CodingDojo Seattle", city: "Seatlle", state: "WA")
+		 Dojo.create(name: "CodingDojo New York", city: "New York", state: "NY")
+
+4. 
+	1. has_many :ninjas
+		 validates :name, :city, presence: true
+		 validates :state , presence:true, is: 2
+	2. belongs_to :dojo 
+		 validates :first_name , :last_name , presence: true
+
+5. 
+	1. Dojo.delete_all
+
+	2. dojo1 = Dojo.new(name: "CodingDojo Silicon Valley",city:"Mountain View", state: "CA")
+		 dojo2 = Dojo.new(name: "CodingDojo Seattle", city: "Seatlle", state: "WA")
+		 dojo3 = Dojo.new(name: "CodingDojo New York", city: "New York", state: "NY")
+		 dojo1.save
+		 dojo2.save
+		 dojo3.save
+
+	3. test1 = Dojo.new(name: "CodingDojo New York", state: "NY")
+		 test1.save
+		 test1.errors.full_messages
+		 test2 = Dojo.new(name: "CodingDojo New York", city:"New York", state: "N")
+		 test2.save
+		 test2.errors.full_messages
+
+	4. Dojo.first.ninjas.create(first_name: "Lacy", last_name: "Black")
+		 Dojo.first.ninjas.create(first_name: "Michael", last_name: "Blue")
+		 Dojo.first.ninjas.create(first_name: "Damien", last_name: "Grey")
+
+	5. Dojo.second.ninjas.create(first_name: "Patrick", last_name: "Yellow")
+		 Dojo.second.ninjas.create(first_name: "Andrew", last_name: "Orange")
+		 Dojo.second.ninjas.create(first_name: "Jash", last_name: "Green")
+
+	6. Dojo.last.ninjas.create(first_name: "Mari", last_name: "Silver")
+		 Dojo.last.ninjas.create(first_name: "Victoria", last_name: "Brown")
+		 Dojo.last.ninjas.create(first_name: "Beverley", last_name: "Gold")
+
+	7. Dojo.first.ninjas.all
+		 Dojo.second.ninjas.all
+		 Dojo.last.ninjas.all
+
+	8. Dojo.second.ninjas.select(:first_name).order("created_at DESC")
+
+	9. has_many :ninjas, dependent: :destroy
+
+
+

@@ -1,0 +1,12 @@
+<h1>Dog#index</h1>
+<p>Find me in app/views/dog/index.html.erb</p>
+
+<hr>
+<% for dog in @dogs %>
+	Name: <%= dog.name %> <a href="/dogs/<%=dog.id%>">Show</a> <a href="/dogs/<%=dog.id%>/edit">Edit</a> <form method="POST" action="/dogs/<%= dog.id %>">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="hidden" name="_method" value="DELETE">
+	<input type="submit" value="Delete">
+</form>
+	<hr>
+<% end %>
